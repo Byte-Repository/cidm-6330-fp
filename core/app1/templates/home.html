@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the Task Management System</h1>
+    
+    <h2>Tasks</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.description }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Notifications</h2>
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification.message }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Feedback</h2>
+    <ul>
+        {% for fb in feedback %}
+            <li>{{ fb.comment }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

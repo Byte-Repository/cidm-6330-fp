@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback List</title>
+</head>
+<body>
+    <h1>Feedback List</h1>
+    <ul>
+        {% for fb in feedback %}
+            <li>{{ fb.comment }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

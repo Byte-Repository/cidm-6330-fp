@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community List</title>
+</head>
+<body>
+    <h1>Community List</h1>
+    <ul>
+        {% for community in communities %}
+            <li><a href="{% url 'community_detail' community.pk %}">{{ community.name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
