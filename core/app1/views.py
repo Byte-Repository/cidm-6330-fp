@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Task, Notification, Feedback, Community
 from rest_framework import generics
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from .serializers import TaskSerializer
 from .permissions import IsTaskOwner
 
@@ -21,16 +23,6 @@ class TaskListView(ListView):
     model = Task
     template_name = 'task_list.html'
     context_object_name = 'tasks'
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handle POST requests to create a new task.
-        """
-        serializer = TaskSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
 
 class TaskDetailView(DetailView):
     model = Task

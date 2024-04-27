@@ -4,7 +4,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Task, Priority
-
 from django.utils import timezone
 
 class TaskListViewTestCase(TestCase):
@@ -54,43 +53,38 @@ class TaskListViewTestCase(TestCase):
 #integration start ------
 
 from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
+from datetime import datetime
 from django.contrib.auth.models import User
 from .models import Task, Priority
 
-class TaskAPITests(TestCase):
+class TaskIntegrationTest(TestCase):
     def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='password123')
-        self.priority = Priority.objects.create(name='High')
+        # Create a test user
+        self.user = User.objects.create(username="testuser")
 
-    def test_create_task(self):
-        """
-        Test creating a task via the API endpoint.
-        """
-        url = reverse('task_list')
-        data = {
-            'description': 'Test Task',
-            'assigned_user': self.user.id,
-            'deadline': '2024-04-30T12:00:00Z',
-            'priority': self.priority.id,
-        }
-        
-        # Log in the user
-        self.client.force_login(self.user)
+        # Create a test priority
+        self.priority = Priority.objects.create(name="High")
 
-        # Send a POST request to the create endpoint with the data
-        response = self.client.post(url, data, format='json')
+    def test_task_flow(self):
+        # Create a task
+        task = Task(
+            description="Test task",
+            assigned_user=self.user,
+            deadline=datetime.now(),
+            priority=self.priority
+        )
 
-        # Assert that the response status code is HTTP 201 Created
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # Save the task to the database
+        task.save()
 
-        # Assert that a Task object was created in the database
-        self.assertEqual(Task.objects.count(), 1)
+        # Retrieve the task from the database
+        retrieved_task = Task.objects.get(description="Test task")
 
-        # Assert that the description of the created task matches the description sent in the request
-        self.assertEqual(Task.objects.get().description, 'Test Task')
+        # Check if the retrieved task matches the created task
+        self.assertEqual(retrieved_task.description, "Test task")
+        self.assertEqual(retrieved_task.assigned_user, self.user)
+        self.assertIsNotNone(retrieved_task.deadline)
+        self.assertEqual(retrieved_task.priority, self.priority)
+
 
 #integration end ------

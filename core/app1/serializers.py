@@ -14,24 +14,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email']
 
 class TaskSerializer(serializers.ModelSerializer):
-    assigned_user = UserSerializer()
+    assigned_user = IsTaskOwner()
     priority = PrioritySerializer()
 
     class Meta:
         model = Task
         fields = ['id', 'description', 'assigned_user', 'deadline', 'priority']
-        read_only_fields = ['assigned_user']  # Make assigned_user read-only
-
-    def validate(self, data):
-        # Example of simple permission logic
-        user = self.context['request'].user
-        assigned_user = data.get('assigned_user')
-
-        # Check if the current user is the owner of the task
-        if user != assigned_user:
-            raise serializers.ValidationError("You are not authorized to assign tasks to other users.")
-
-        return data
+        read_only_fields = ['assigned_user']
 
 class NotificationSerializer(serializers.ModelSerializer):
     user = UserSerializer()

@@ -15,7 +15,4 @@ urlpatterns = [
     # Community-related URLs
     path('community/', views.CommunityListView.as_view(), name='community_list'),
     path('community/<int:pk>/', views.CommunityDetailView.as_view(), name='community_detail'),
-
-    # URL for creating tasks via API
-    path('api/tasks/', views.TaskListView.as_view(), name='task_create_api'),
 ]
