@@ -2,16 +2,29 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Task, Notification, Feedback, Community
 from rest_framework import generics
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 from .serializers import TaskSerializer
 from .permissions import IsTaskOwner
 
-class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
+class TaskDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            task = Task.objects.get(pk=pk)
+            serializer = TaskSerializer(task)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"message": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class TaskListCreate(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsTaskOwner]  # Apply custom permission
+
+class TaskRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsTaskOwner]
 
 def home(request):
     tasks = Task.objects.all()

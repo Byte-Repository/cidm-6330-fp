@@ -2,6 +2,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Task-related API URLs
+    path('api/tasks/', views.TaskListCreate.as_view(), name='task_list_create'),  
+    path('api/tasks/<int:pk>/', views.TaskRetrieveUpdateDestroy.as_view(), name='task-retrieve-update-destroy'),
+    path('api/tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail_view'),  # New URL for task detail 
+
     # Task-related URLs
     path('tasks/', views.TaskListView.as_view(), name='task_list'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task_detail'),

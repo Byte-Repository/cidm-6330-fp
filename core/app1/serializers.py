@@ -2,6 +2,11 @@ from rest_framework import serializers
 from .models import Task, Notification, Feedback, Community, Priority
 from .permissions import IsTaskOwner
 from django.contrib.auth.models import User
+from rest_framework import serializers
+from .models import Task, Priority
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class PrioritySerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,13 +19,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email']
 
 class TaskSerializer(serializers.ModelSerializer):
-    assigned_user = IsTaskOwner()
-    priority = PrioritySerializer()
+    assigned_user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    priority = serializers.PrimaryKeyRelatedField(queryset=Priority.objects.all())
 
     class Meta:
         model = Task
         fields = ['id', 'description', 'assigned_user', 'deadline', 'priority']
-        read_only_fields = ['assigned_user']
 
 class NotificationSerializer(serializers.ModelSerializer):
     user = UserSerializer()
