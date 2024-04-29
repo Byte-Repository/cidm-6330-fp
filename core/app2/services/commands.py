@@ -30,21 +30,30 @@ class InjectorConfig:
     def get_injector(self):
         return self.injector
 
+import logging
 
 class AddTaskCommand(Command):
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        super().__init__()
+
     """
     Command to add a new task.
     """
 
     @inject
     @transaction.atomic
-    def execute(self, data, injector: Injector = None):
+    def execute(self, data: TaskDomain, injector: Injector = None):
         """
         Execute method to add a new task.
         """
-        now = datetime.now()
-        task = Task(description=data.description, assigned_user=data.assigned_user, deadline=data.deadline, priority=data.priority, created_at=now)
-        task.save()
+        try:
+            task = Task(description=data.description, assigned_user=data.assigned_user, deadline=data.deadline, priority=data.priority)
+            task.save()
+            self.logger.info("Task added successfully")
+        except Exception as e:
+            self.logger.error("Error occurred while adding task: %s", str(e))
+            raise
 
 class ListTasksCommand(Command):
     """
