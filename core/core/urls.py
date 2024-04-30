@@ -14,19 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
+from django.contrib import admin
 from app1.views import TaskListView, TaskDetailView, NotificationListView, FeedbackListView, CommunityListView, CommunityDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app1/tasks/', TaskListView.as_view(), name='task_list'),
-    path('app1/tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
-    path('app1/notifications/', NotificationListView.as_view(), name='notification_list'),
-    path('app1/feedbacks/', FeedbackListView.as_view(), name='feedback_list'),
-    path('app1/communities/', CommunityListView.as_view(), name='community_list'),
-    path('app1/communities/<int:pk>/', CommunityDetailView.as_view(), name='community_detail'),
+    path('tasks/', TaskListView.as_view(), name='task_list'),
+    path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
+    path('notifications/', NotificationListView.as_view(), name='notification_list'),
+    path('feedbacks/', FeedbackListView.as_view(), name='feedback_list'),
+    path('communities/', CommunityListView.as_view(), name='community_list'),
+    path('communities/<int:pk>/', CommunityDetailView.as_view(), name='community_detail'),
 
     # Include the URLs for the app1 app
-    path('app1/', include('app1.urls')),
+    path('', include('app1.urls')),
 ]
+
