@@ -8,20 +8,26 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+django.setup()
 
-from channels.routing import ProtocolTypeRouter
 from django.core.asgi import get_asgi_application
+core_asgi_app = get_asgi_application()
+
+from channels.routing import ChannelNameRouter, ProtocolTypeRouter
 
 from app1 import consumers
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
-
-app1_asgi_app = get_asgi_application()
 
 # for channels support
 application = ProtocolTypeRouter(
     {
-        "http": app1_asgi_app,
-        "channel": app1_asgi_app,
+        "http": core_asgi_app,
+        "channel": ChannelNameRouter(
+            {
+                 "Notification": consumers.TaskNotificationConsumer.as_asgi()
+            }
+        ),
     }
 )

@@ -1,11 +1,17 @@
 import json
+import asyncio
+import datetime
 
 from channels.consumer import AsyncConsumer
 from channels.generic.http import AsyncHttpConsumer
 
-from .models import Notification, Feedback, Community  # Import necessary models
+from app1.models import Notification, Feedback, Community # Import necessary models
 
-class TaskNotificationConsumer(AsyncConsumer):
+class TaskSucceededConsumer(AsyncConsumer):
+    async def task_succeeded(self, event):
+        print("Task succeeded")
+
+class TaskNotificationConsumer(AsyncHttpConsumer):
     async def connect(self):
         self.user = self.scope['user']
         if self.user.is_anonymous:
@@ -37,8 +43,8 @@ class TaskNotificationConsumer(AsyncConsumer):
         # Fetch notifications from models and send them
         notifications = Notification.objects.filter(user=self.user)
         for notification in notifications:
+            await asyncio.sleep(0)  # Simulate async operation
             await self.send_notification({'notification': notification.message})
-
 class TaskFeedbackConsumer(AsyncConsumer):
     async def connect(self):
         self.user = self.scope['user']
@@ -64,6 +70,7 @@ class TaskFeedbackConsumer(AsyncConsumer):
         # Fetch feedback from models and send them
         feedbacks = Feedback.objects.filter(user=self.user)
         for feedback in feedbacks:
+            await asyncio.sleep(0)  # Simulate async operation
             await self.send_feedback({'feedback': feedback.comment})
 
 class CommunityChatConsumer(AsyncConsumer):

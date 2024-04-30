@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    
+    "daphne",
+    "uvicorn",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,7 +134,7 @@ REST_FRAMEWORK = {
 }
 
 # Channels
-ASGI_APPLICATION = "app1.asgi.application"
+ASGI_APPLICATION = "core.asgi.application"
 # CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 CHANNEL_LAYERS = {
     "default": {
@@ -143,3 +144,4 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
