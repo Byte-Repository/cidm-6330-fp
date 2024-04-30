@@ -81,3 +81,23 @@ Software presents a compelling solution to the challenges posed by task manageme
 3. **Community Management**
    - Description: Test the functionality of community management features by administrators.
    - Business Rule: Ensure that administrators can create, moderate, and manage topics and discussions effectively.
+
+## Running Tests in Terminal
+
+### Unit Tests and Integration Tests
+**To run unit and integration tests, execute the following commands:**
+
+- cd core
+- python manage.py test app1/app2
+
+
+### End-to-End Tests
+**To run End-to-end tests, execute the following commands:**
+
+- python manage.py runserver
+- python manage.py test app1/app2
+
+## Install Requirements
+
+- pip install -r requirements.txt
+
